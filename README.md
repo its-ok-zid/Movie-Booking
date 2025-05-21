@@ -41,10 +41,6 @@ A full-stack web application that allows users to register, log in, search for m
 - **Tailwind CSS / Bootstrap** (optional for styling)
 
 ---
-
-## 📁 Project Structure
-
-
 ---
 
 ## 🚀 How to Run
@@ -56,4 +52,4 @@ A full-stack web application that allows users to register, log in, search for m
    git clone https://github.com/your-username/movie-booking.git
    cd movie-booking/backend
 
-   Access API docs: http://localhost:8080/swagger-ui.html
+Access API docs: http://localhost:8080/swagger-ui.html
