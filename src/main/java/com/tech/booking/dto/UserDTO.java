@@ -30,6 +30,9 @@ public class UserDTO {
     @NotBlank(message = "Password is mandatory")
     private String password;
 
+    @NotBlank(message = "Password is mandatory")
+    private String confirmPassword;
+
     @NotBlank(message = "Contact number is mandatory")
     private String contactNumber;
 

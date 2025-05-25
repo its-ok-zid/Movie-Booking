@@ -55,26 +55,32 @@ public class UserServiceImpl implements UserService {
         return response;
     }
 
+   @Override
+public String login(UserDTO userDTO) {
+    log.info("Attempting to log in user with loginId: {}", userDTO.getLoginId());
+    String loginId = userDTO.getLoginId();
+    String password = userDTO.getPassword();
+
+    return userRepository.findByLoginId(loginId)
+            .map(user -> {
+                if (passwordEncoder.matches(password, user.getPassword())) {
+                    log.info("User login successful for loginId: {}", loginId);
+                    return "Login successful for user: " + user.getLoginId();
+                } else {
+                    log.warn("Password not matched for loginId: {}", loginId);
+                    return "Password not match for loginId: " + loginId;
+                }
+            })
+            .orElseGet(() -> {
+                log.warn("LoginId not found: {}", loginId);
+                return "LoginId not found: " + loginId;
+            });
+}
     /**
      * Logs in a user by checking the loginId and password.
      * Returns true if login is successful, false otherwise.
      */
-    @Override
-    public boolean login(String loginId, String password) {
-        log.info("User login attempt with loginId: {}", loginId);
 
-        // Check if user exists and password matches
-        return userRepository.findByLoginId(loginId)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> {
-                    log.info("User login successful for loginId: {}", loginId);
-                    return true;
-                })
-                .orElseGet(() -> {
-                    log.warn("Login failed for loginId: {}", loginId);
-                    return false;
-                });
-    }
 
     /**
      * Handles forgot password functionality by sending reset instructions to the user's email.
@@ -91,7 +97,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> {
                     log.warn("User not found with loginId: {}", loginId);
-                    return new ResourceNotFoundException("User not found with this login ID: "+ loginId);
+                    return new ResourceNotFoundException("User not found with this login ID: " + loginId);
                 });
 
         String maskedEmail = maskEmail(user.getEmail());

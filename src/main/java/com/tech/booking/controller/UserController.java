@@ -1,7 +1,6 @@
 package com.tech.booking.controller;
 
 import com.tech.booking.dto.UserDTO;
-import com.tech.booking.model.User;
 import com.tech.booking.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,20 +34,16 @@ public class UserController {
 
     // Endpoint to log in a user
     @Operation(summary = "Login using loginId and password")
-    @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("loginId") String loginId,
-                                        @RequestParam("password") String password) {
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserDTO userDTO) {
 
-        log.info("Login attempt for loginId: {}", loginId);
-        boolean success = userService.login(loginId, password);
-
-        if(success) {
-            log.info("Login successful for loginId: {}", loginId);
-            return ResponseEntity.ok("Login successful");
-        } else {
-            log.warn("Login failed for loginId: {}", loginId);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
-        }
+        UserDTO requestedUser = new UserDTO();
+        requestedUser.setLoginId(userDTO.getLoginId());
+        requestedUser.setPassword(userDTO.getPassword());
+        log.info("Attempting to log in user with loginId: {}", userDTO.getLoginId());
+        String token = userService.login(requestedUser);
+        log.info("User logged in successfully with loginId: {}", userDTO.getLoginId());
+        return ResponseEntity.ok(token);
     }
 
     // Endpoint to handle forgot password flow

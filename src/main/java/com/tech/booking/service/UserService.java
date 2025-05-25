@@ -5,6 +5,6 @@ import com.tech.booking.dto.UserDTO;
 public interface UserService {
 
     UserDTO register(UserDTO userDTO);
-    boolean login(String loginId, String password);
+    String login(UserDTO userDTO);
     String forgotPassword(String loginId);
 }
