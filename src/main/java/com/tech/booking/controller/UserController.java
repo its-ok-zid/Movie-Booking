@@ -3,7 +3,6 @@ package com.tech.booking.controller;
 import com.tech.booking.dto.LoginRequest;
 import com.tech.booking.dto.ResetPasswordRequest;
 import com.tech.booking.dto.UserDTO;
-import com.tech.booking.model.User;
 import com.tech.booking.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,7 +23,6 @@ public class UserController {
 
     private final UserService userService;
 
-    // Endpoint to register a new user
     @Operation(summary = "Register a new user")
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
@@ -35,7 +33,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    // Endpoint to log in a user
     @Operation(summary = "Login using loginId and password")
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam("loginId") String loginId,
@@ -53,7 +50,6 @@ public class UserController {
         }
     }
 
-    // login with POST method
     @Operation(summary = "Login using loginId and password (POST)")
     @PostMapping(value = "/login", consumes = "application/json")
     public ResponseEntity<String> loginPost(@Valid @RequestBody LoginRequest request) {
@@ -64,7 +60,6 @@ public class UserController {
                 : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
     }
 
-    // Endpoint to handle forgot password flow
     @Operation(summary = "Forgot password flow")
     @GetMapping("/{username}/forgot")
     public ResponseEntity<String> forgotPassword(@PathVariable("username") String loginId) {
@@ -75,7 +70,6 @@ public class UserController {
         return ResponseEntity.ok(message);
     }
 
-    // forgot password with POST method
     @Operation(summary = "Reset password using loginId")
     @PostMapping(value = "/reset-password", consumes = "application/json")
     public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
