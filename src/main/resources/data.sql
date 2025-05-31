@@ -2,6 +2,7 @@
 INSERT INTO Movie (movie_name, theatre_name, total_tickets, status) VALUES
 ('Inception', 'PVR Cinema', 100, 'BOOK_ASAP'),
 ('Interstellar', 'INOX', 120, 'BOOK_ASAP');
+('The Dark Knight', 'Cinepolis', 80, 'BOOK_ASAP');
 
 -- Insert Users
 INSERT INTO user_details (first_name, last_name, email, login_id, password, contact_number, role) VALUES
