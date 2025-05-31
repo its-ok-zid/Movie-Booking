@@ -42,10 +42,6 @@ public class User {
     @NotBlank(message = "password is mandatory")
     private String password;
 
-    @Transient
-    @NotBlank(message = "confirm password is mandatory")
-    private String confirmPassword;
-
     @Column(name = "contact_number", nullable = false, unique = true)
     @NotBlank(message = "contact number is mandatory")
     private String contactNumber;

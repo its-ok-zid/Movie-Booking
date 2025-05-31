@@ -1,5 +1,6 @@
 package com.tech.booking.service.impl;
 
+import com.tech.booking.dto.ResetPasswordRequest;
 import com.tech.booking.dto.UserDTO;
 import com.tech.booking.enums.Role;
 import com.tech.booking.exception.ResourceAlreadyExistsException;
@@ -7,6 +8,7 @@ import com.tech.booking.exception.ResourceNotFoundException;
 import com.tech.booking.model.User;
 import com.tech.booking.repository.UserRepository;
 import com.tech.booking.service.UserService;
+import com.tech.booking.utils.PasswordValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -30,6 +32,7 @@ public class UserServiceImpl implements UserService {
      * @param userDTO the user details to register
      * @return UserDTO containing the registered user's details
      */
+    //apply password validation (pending)
     @Override
     public UserDTO register(UserDTO userDTO) {
         log.info("Registration user with loginId: {}", userDTO.getLoginId());
@@ -100,6 +103,7 @@ public class UserServiceImpl implements UserService {
         return "Reset password instructions have been sent to " + maskedEmail + ". Please check your email.";
     }
 
+
     // Masks the email address by replacing part of the username with asterisks.
     private String maskEmail(String email) {
         if (!StringUtils.hasText(email) || !email.contains("@")) return "unknown@example.com";
@@ -108,6 +112,41 @@ public class UserServiceImpl implements UserService {
         String domain = parts[1];
         String maskedUsername = username.length() <= 2 ? username.charAt(0) + "*" : username.substring(0, 2) + "****";
         return maskedUsername + "@" + domain;
+    }
+
+    // Resets the user's password after validating the new password and confirming it.
+    @Override
+    public String resetPassword(ResetPasswordRequest request) {
+
+        log.info("Resetting password for loginId: {}", request.getLoginId());
+
+        if(!PasswordValidator.isValid(request.getNewPassword())) {
+            log.warn("Password does not meet complexity requirements for loginId: {}", request.getLoginId());
+            throw new IllegalArgumentException("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one digit, and one special character.");
+        }
+
+        if(!request.getNewPassword().equals(request.getConfirmPassword())){
+            log.warn("New password and confirm password do not match for loginId: {}", request.getLoginId());
+            throw new IllegalArgumentException("New password and confirm password do not match");
+        }
+
+        User user = userRepository.findByLoginId(request.getLoginId())
+                .orElseThrow(() -> {
+                    log.warn("User not found with loginId: {}", request.getLoginId());
+                    return new ResourceNotFoundException("User not found with this login ID: " + request.getLoginId());
+                });
+
+        if(passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            log.warn("New password cannot be the same as the old password for loginId: {}", request.getLoginId());
+            throw new IllegalArgumentException("New password cannot be the same as the old password");
+        }
+
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        user.setPassword(encodedPassword);
+        userRepository.save(user);
+
+        log.info("Password reset successful for loginId: {}", request.getLoginId());
+        return "Password reset successful for loginId: " + request.getLoginId();
     }
 
 }

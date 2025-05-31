@@ -1,5 +1,7 @@
 package com.tech.booking.controller;
 
+import com.tech.booking.dto.LoginRequest;
+import com.tech.booking.dto.ResetPasswordRequest;
 import com.tech.booking.dto.UserDTO;
 import com.tech.booking.model.User;
 import com.tech.booking.service.UserService;
@@ -51,6 +53,17 @@ public class UserController {
         }
     }
 
+    // login with POST method
+    @Operation(summary = "Login using loginId and password (POST)")
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<String> loginPost(@Valid @RequestBody LoginRequest request) {
+        log.info("Login POST attempt for loginId: {}", request.getLoginId());
+        boolean success = userService.login(request.getLoginId(), request.getPassword());
+        return success
+                ? ResponseEntity.ok("Login successful")
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
+    }
+
     // Endpoint to handle forgot password flow
     @Operation(summary = "Forgot password flow")
     @GetMapping("/{username}/forgot")
@@ -62,4 +75,13 @@ public class UserController {
         return ResponseEntity.ok(message);
     }
 
+    // forgot password with POST method
+    @Operation(summary = "Reset password using loginId")
+    @PostMapping(value = "/reset-password", consumes = "application/json")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+
+        log.info("Reset password request for loginId: {}", request.getLoginId());
+        String result = userService.resetPassword(request);
+        return ResponseEntity.ok(result);
+    }
 }
