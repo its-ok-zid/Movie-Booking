@@ -6,7 +6,9 @@ INSERT INTO Movie (movie_name, theatre_name, total_tickets, status) VALUES
 -- Insert Users
 INSERT INTO user_details (first_name, last_name, email, login_id, password, contact_number, role) VALUES
 ('John', 'Doe', 'john.doe@example.com', 'john123', 'password123', '9876543210', 'USER'),
-('Admin', 'Smith', 'admin@example.com', 'admin001', 'adminpass', '9998887776', 'ADMIN');
+('Admin', 'Smith', 'admin@example.com', 'admin001', 'adminpass', '9998887776', 'ADMIN'),
+('Zid', '.', 'zid@example.com', 'Sigma', 'Zid000@', '9876543010', 'ADMIN'),
+('Soham', 'Ghosal', 'soham@example.com', 'Simon', 'Sg000@', '8886543010', 'USER');
 
 -- Insert Tickets (linking with movie_name and theatre_name)
 INSERT INTO Tickets (movie_name, theatre_name, number_of_tickets, seat_number) VALUES
