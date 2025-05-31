@@ -1,7 +1,6 @@
 package com.tech.booking.controller;
 
 import com.tech.booking.dto.UserDTO;
-import com.tech.booking.model.User;
 import com.tech.booking.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
-    // Endpoint to register a new user
+
     @Operation(summary = "Register a new user")
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
@@ -33,7 +32,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-    // Endpoint to log in a user
+
     @Operation(summary = "Login using loginId and password")
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam("loginId") String loginId,
@@ -42,7 +41,7 @@ public class UserController {
         log.info("Login attempt for loginId: {}", loginId);
         boolean success = userService.login(loginId, password);
 
-        if(success) {
+        if (success) {
             log.info("Login successful for loginId: {}", loginId);
             return ResponseEntity.ok("Login successful");
         } else {
@@ -51,7 +50,6 @@ public class UserController {
         }
     }
 
-    // Endpoint to handle forgot password flow
     @Operation(summary = "Forgot password flow")
     @GetMapping("/{username}/forgot")
     public ResponseEntity<String> forgotPassword(@PathVariable("username") String loginId) {

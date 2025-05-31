@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userDTO, user);
         user.setRole(userDTO.getRole() != null ? userDTO.getRole() : Role.USER);
 
-        // Hash the password before saving
+
         String encryptedPassword = new BCryptPasswordEncoder(12).encode(userDTO.getPassword());
         user.setPassword(encryptedPassword);
 
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
     public boolean login(String loginId, String password) {
         log.info("User login attempt with loginId: {}", loginId);
 
-        // Check if user exists and password matches
+
         return userRepository.findByLoginId(loginId)
                 .filter(user -> passwordEncoder.matches(password, user.getPassword()))
                 .map(user -> {
@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> {
                     log.warn("User not found with loginId: {}", loginId);
-                    return new ResourceNotFoundException("User not found with this login ID: "+ loginId);
+                    return new ResourceNotFoundException("User not found with this login ID: " + loginId);
                 });
 
         String maskedEmail = maskEmail(user.getEmail());
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         return "Reset password instructions have been sent to " + maskedEmail + ". Please check your email.";
     }
 
-    // Masks the email address by replacing part of the username with asterisks.
+
     private String maskEmail(String email) {
         if (!StringUtils.hasText(email) || !email.contains("@")) return "unknown@example.com";
         String[] parts = email.split("@");
