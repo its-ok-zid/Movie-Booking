@@ -1,5 +1,7 @@
 package com.tech.booking.controller;
 
+import com.tech.booking.dto.LoginRequest;
+import com.tech.booking.dto.ResetPasswordRequest;
 import com.tech.booking.dto.UserDTO;
 import com.tech.booking.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +23,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     @Operation(summary = "Register a new user")
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")
     public ResponseEntity<UserDTO> registerUser(@Valid @RequestBody UserDTO userDTO) {
@@ -32,7 +33,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
-
     @Operation(summary = "Login using loginId and password")
     @GetMapping("/login")
     public ResponseEntity<String> login(@RequestParam("loginId") String loginId,
@@ -41,13 +41,23 @@ public class UserController {
         log.info("Login attempt for loginId: {}", loginId);
         boolean success = userService.login(loginId, password);
 
-        if (success) {
+        if(success) {
             log.info("Login successful for loginId: {}", loginId);
             return ResponseEntity.ok("Login successful");
         } else {
             log.warn("Login failed for loginId: {}", loginId);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
         }
+    }
+
+    @Operation(summary = "Login using loginId and password (POST)")
+    @PostMapping(value = "/login", consumes = "application/json")
+    public ResponseEntity<String> loginPost(@Valid @RequestBody LoginRequest request) {
+        log.info("Login POST attempt for loginId: {}", request.getLoginId());
+        boolean success = userService.login(request.getLoginId(), request.getPassword());
+        return success
+                ? ResponseEntity.ok("Login successful")
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
     }
 
     @Operation(summary = "Forgot password flow")
@@ -60,4 +70,12 @@ public class UserController {
         return ResponseEntity.ok(message);
     }
 
+    @Operation(summary = "Reset password using loginId")
+    @PostMapping(value = "/reset-password", consumes = "application/json")
+    public ResponseEntity<String> resetPassword(@Valid @RequestBody ResetPasswordRequest request) {
+
+        log.info("Reset password request for loginId: {}", request.getLoginId());
+        String result = userService.resetPassword(request);
+        return ResponseEntity.ok(result);
+    }
 }
