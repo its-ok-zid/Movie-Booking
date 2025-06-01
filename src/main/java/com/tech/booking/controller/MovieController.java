@@ -47,19 +47,22 @@ public class MovieController {
         }
     }
 
+
     @Operation(summary = "Book tickets for a movie")
     @PostMapping(value = "/{moviename}/add", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ticket> bookTicket(@PathVariable String moviename,
                                              @Valid @RequestBody TicketRequest request) {
         log.info("Booking ticket for movie: {}", moviename);
+
         if (!moviename.equalsIgnoreCase(request.getMovieName())) {
             log.warn("Movie name in path '{}' does not match request body '{}'", moviename, request.getMovieName());
             return ResponseEntity.badRequest().build();
         }
         Ticket ticket = movieService.bookTicket(request);
         log.info("Ticket booked successfully for movie: {}", ticket.getMovieId().getMovieName());
-        return new ResponseEntity<>(ticket, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
     }
+
 
     @Operation(summary = "Update ticket status and available ticket count")
     @PutMapping("/{movieName}/update/{ticketId}")
@@ -71,6 +74,7 @@ public class MovieController {
         log.info("Ticket status updated successfully");
         return ResponseEntity.ok("Ticket status updated successfully.");
     }
+
 
     @Operation(summary = "Delete movie by name and theatre")
     @DeleteMapping("/{movieName}/delete/{theatreName}")

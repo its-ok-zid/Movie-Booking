@@ -42,11 +42,13 @@ public class MovieServiceImpl implements MovieService {
                 .findFirst();
 
         return result.map(movie -> new MovieDTO(
-                movie.getId().getMovieName(),
-                movie.getId().getTheatreName(),
-                movie.getTotalTickets(),
-                movie.getStatus()))
+                        movie.getId().getMovieName(),
+                        movie.getId().getTheatreName(),
+                        movie.getTotalTickets(),
+                        movie.getStatus()))
                 .orElseThrow(() -> new RuntimeException("Movie not found with name: " + movieName));
+
+
     }
 
     @Override
@@ -66,14 +68,12 @@ public class MovieServiceImpl implements MovieService {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new ResourceNotFoundException("Movie not found for booking"));
 
-        int totalBooked = ticketRepository.sumTicketsByMovieId(movieId);
-        int remaining = movie.getTotalTickets() - totalBooked;
+        int available = movie.getTotalTickets();
 
-        if (request.getNumberOfTickets() > remaining) {
+        if (request.getNumberOfTickets() > available) {
             throw new IllegalArgumentException("Not enough tickets available");
         }
 
-        // Save ticket
         Ticket ticket = new Ticket();
         ticket.setMovieId(movieId);
         ticket.setNumberOfTickets(request.getNumberOfTickets());
@@ -81,8 +81,8 @@ public class MovieServiceImpl implements MovieService {
 
         Ticket saved = ticketRepository.save(ticket);
 
-        // Update movie status
-        int updatedRemaining = remaining - request.getNumberOfTickets();
+        int updatedRemaining = available - request.getNumberOfTickets();
+        movie.setTotalTickets(updatedRemaining);
         movie.setStatus(updatedRemaining == 0 ? TicketStatus.SOLD_OUT : TicketStatus.BOOK_ASAP);
         movieRepository.save(movie);
 
@@ -110,6 +110,7 @@ public class MovieServiceImpl implements MovieService {
         // Update movie status
         if (remainingTickets == 0) {
             movie.setStatus(TicketStatus.SOLD_OUT);
+            throw new RuntimeException("All tickets sold out for this movie.");
         } else {
             movie.setStatus(TicketStatus.BOOK_ASAP);
         }
