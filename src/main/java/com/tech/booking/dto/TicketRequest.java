@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class TicketRequest {
 
+    //needs to be removed not required for ticket booking
     @NotBlank(message = "Movie name is mandatory")
     private String movieName;
 

@@ -15,5 +15,5 @@ public interface MovieService {
     void deleteMovie(String movieName, String theatreName);
     Ticket bookTicket(TicketRequest request);
     void updateTicketStatus(String movieName, Long ticketId,MovieDTO request);
-
+    boolean hasBookings(String movieName, String theatreName);
 }

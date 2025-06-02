@@ -112,4 +112,10 @@ public class MovieServiceImpl implements MovieService {
         movieRepository.save(movie);
     }
 
+    @Override
+    public boolean hasBookings(String movieName, String theatreName) {
+        MovieId movieId = new MovieId(movieName, theatreName);
+        return ticketRepository.existsByMovieId(movieId);
+    }
+
 }

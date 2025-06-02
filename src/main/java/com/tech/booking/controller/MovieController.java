@@ -54,10 +54,18 @@ public class MovieController {
                                              @Valid @RequestBody TicketRequest request) {
         log.info("Booking ticket for movie: {}", moviename);
 
+        MovieDTO movieDTO = movieService.getMovieByName(moviename);
         if (!moviename.equalsIgnoreCase(request.getMovieName())) {
             log.warn("Movie name in path '{}' does not match request body '{}'", moviename, request.getMovieName());
             return ResponseEntity.badRequest().build();
         }
+
+        if(movieDTO.getTotalTickets() <= 0) {
+            log.warn("No tickets available for movie: {}", moviename);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .header("Message","No ticket available for movie : " + moviename).build();
+        }
+
         Ticket ticket = movieService.bookTicket(request);
         log.info("Ticket booked successfully for movie: {}", ticket.getMovieId().getMovieName());
         return ResponseEntity.status(HttpStatus.CREATED).body(ticket);
@@ -81,6 +89,14 @@ public class MovieController {
     public ResponseEntity<String> deleteMovie(@PathVariable String movieName,
                                               @PathVariable String theatreName) {
         log.info("Deleting movie: {} in theatre: {}", movieName, theatreName);
+
+        boolean hasBookings = movieService.hasBookings(movieName, theatreName);
+        if (hasBookings) {
+            log.warn("Cannot delete movie: {} in theatre: {} as bookings exist", movieName, theatreName);
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("Cannot delete movie '" + movieName + "' in theatre '" + theatreName + "' as bookings exist for this movie");
+        }
+
         movieService.deleteMovie(movieName, theatreName);
         log.info("Movie deleted successfully: {} - {}", movieName, theatreName);
         return ResponseEntity.ok("Movie deleted successfully");

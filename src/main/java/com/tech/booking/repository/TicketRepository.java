@@ -10,5 +10,8 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT COALESCE(SUM(t.numberOfTickets), 0) FROM Ticket t WHERE t.movieId = :movieId")
     int sumTicketsByMovieId(@Param("movieId") MovieId movieId);
+
+
+    boolean existsByMovieId(MovieId movieId);
 }
 
