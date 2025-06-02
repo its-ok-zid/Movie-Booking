@@ -68,9 +68,9 @@ public class MovieController {
     @PutMapping("/{movieName}/update/{ticketId}")
     public ResponseEntity<String> updateTicketStatus(@PathVariable String movieName,
                                                      @PathVariable Long ticketId,
-                                                     @RequestParam String theatreName) {
+                                                     @RequestBody MovieDTO request) {
         log.info("Updating ticket status for movie: {}, ticketId: {}", movieName, ticketId);
-        movieService.updateTicketStatus(movieName, theatreName, ticketId);
+        movieService.updateTicketStatus(movieName, ticketId, request);
         log.info("Ticket status updated successfully");
         return ResponseEntity.ok("Ticket status updated successfully.");
     }

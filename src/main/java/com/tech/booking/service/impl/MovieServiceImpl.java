@@ -89,30 +89,24 @@ public class MovieServiceImpl implements MovieService {
         return saved;
     }
 
-    @Override
-    public void updateTicketStatus(String movieName, String theatreName, Long ticketId) {
-        MovieId movieId = new MovieId(movieName, theatreName);
+   @Override
+    public void updateTicketStatus(String movieName, Long ticketId, MovieDTO request) {
+        MovieId movieId = new MovieId(movieName, request.getTheatreName());
 
-        // Validate ticket exists
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new RuntimeException("Ticket not found."));
 
-        // Validate movie exists
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Movie not found."));
 
-        // Calculate total booked tickets for this movie
-        int totalBooked = ticketRepository.sumTicketsByMovieId(movieId);
+        // Update totalTickets
+        movie.setTotalTickets(request.getTotalTickets());
 
-        // Determine remaining tickets
-        int remainingTickets = movie.getTotalTickets() - totalBooked;
-
-        // Update movie status
-        if (remainingTickets == 0) {
-            movie.setStatus(TicketStatus.SOLD_OUT);
-            throw new RuntimeException("All tickets sold out for this movie.");
-        } else {
+        // Set status based on totalTickets
+        if (request.getTotalTickets() > 0) {
             movie.setStatus(TicketStatus.BOOK_ASAP);
+        } else {
+            movie.setStatus(TicketStatus.SOLD_OUT);
         }
 
         movieRepository.save(movie);

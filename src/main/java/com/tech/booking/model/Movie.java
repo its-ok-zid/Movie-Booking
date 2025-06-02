@@ -20,7 +20,6 @@ public class Movie {
     private MovieId id;
 
     @Column(name = "total_tickets", nullable = false)
-    @Min(value = 1, message = "Total tickets must be at least 1")
     private int totalTickets;
 
     @Enumerated(EnumType.STRING)
