@@ -1,1 +1,69 @@
 /* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css');
+
+* {
+	margin: 0;
+	padding: 0;
+}
+
+a {
+	text-decoration: none !important;
+	color: var(--primary-light) !important;
+}
+
+body {
+	background: linear-gradient(to top right, #21466b, #59738f);
+}
+
+:root {
+	--primary-light: #33ffd5;
+	--primary-dark: #00cca2;
+	--secondary-light: #20466b;
+	--secondary-dark: #11273d;
+	--tertiary-light: #336faa;
+	--accent: #d27bee;
+	--accent-dark: #ab57c7;
+}
+
+.navbar-brand {
+	font-family: "Comfortaa", cursive;
+	font-size: 1.5rem;
+}
+
+.nav-link {
+	font-size: 1.2rem;
+	margin-right: 5px;
+}
+
+footer {
+	padding: 1rem;
+	background-color: #333;
+	color: #fff;
+	text-align: center;
+}
+
+/* Button styles */
+.button_cs {
+	color: white !important;
+	border: none !important;
+	width: 100% !important;
+	font-size: 1.2rem !important;
+	padding: 10px !important;
+}
+
+.button_login {
+	background-color: var(--accent) !important;
+}
+
+.button_login:hover {
+	background-color: var(--accent-dark) !important;
+}
+
+.button_signup {
+	background-color: var(--secondary-light) !important;
+}
+
+.button_signup:hover {
+	background-color: var(--secondary-dark) !important;
+}
