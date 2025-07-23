@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +9,14 @@ export class AuthService {
   private loggedIn: boolean = false;
   private userRole: string | null = null;
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
-  login(role: string): void {
-    this.loggedIn = true;
-    this.userRole = role;
-    localStorage.setItem('userRole', role); // Optional: persist role across refresh
+  login(username: string, password: string): Observable<any> {
+    return this.http.post('/api/auth/login', { username, password });
+  }
+
+  register(username: string, password: string): Observable<any> {
+    return this.http.post('/api/auth/register', { username, password });
   }
 
   logout(): void {

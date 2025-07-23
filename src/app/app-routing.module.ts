@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './pages/login.component';
+import { RegisterComponent } from './pages/register.component';
 import { NavbarComponent } from './shared/components/navbar/navbar.component';
 
 const routes: Routes = [
-    { path: '', component: NavbarComponent },
+    { path: '', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
+    { path: 'register', component: RegisterComponent },
+    { path: '**', redirectTo: '' }
 ];
 
 @NgModule({
