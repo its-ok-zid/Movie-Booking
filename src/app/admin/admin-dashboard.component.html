@@ -1,0 +1,58 @@
+<div class="admin-dashboard-container">
+  <!-- Error Modal -->
+  <div class="modal fade show" tabindex="-1" role="dialog" [ngStyle]="{display: showErrorModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)'}" *ngIf="showErrorModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete Error</h5>
+          <button type="button" class="close" (click)="closeErrorModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ errorModalMsg }}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeErrorModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h2 class="mb-4">Admin Dashboard</h2>
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+  <div *ngIf="errorMsg" class="alert alert-danger text-center">{{ errorMsg }}</div>
+  <table class="table table-bordered table-striped" *ngIf="!loading">
+    <thead>
+      <tr>
+        <th>Movie Name</th>
+        <th>Theatre Name</th>
+        <th>Booked Tickets</th>
+        <th>Available Tickets</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let movie of movies; let i = index">
+        <td>{{ movie.movieName }}</td>
+        <td>{{ movie.theatreName }}</td>
+        <td>{{ movie.bookedTickets }}</td>
+        <td>
+          <span *ngIf="editIndex !== i">{{ movie.totalTickets }}</span>
+          <input *ngIf="editIndex === i" type="number" [(ngModel)]="updatedTickets" min="0" class="form-control" />
+        </td>
+        <td>{{ movie.status }}</td>
+        <td>
+          <button *ngIf="editIndex !== i" class="btn btn-sm btn-primary me-2" (click)="startEdit(i)">Edit</button>
+          <button *ngIf="editIndex === i" class="btn btn-sm btn-success me-2" (click)="saveTickets(i)">Save</button>
+          <button *ngIf="editIndex === i" class="btn btn-sm btn-secondary me-2" (click)="cancelEdit()">Cancel</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteMovie(i)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

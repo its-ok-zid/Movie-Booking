@@ -1,0 +1,36 @@
+<div class="modal-container"></div>
+  <div class="modal-header">
+    <h2>Book Tickets</h2>
+    <button class="close-btn" (click)="close()">&times;</button>
+  </div>
+  <div class="modal-body">
+    <div class="movie-info">
+      <div><strong>Movie:</strong> {{ movieName }}</div>
+      <div><strong>Theatre:</strong> {{ theatreName }}</div>
+    </div>
+    <div class="seat-grid">
+      <div *ngFor="let row of seatRows; let rowIdx = index" class="seat-row">
+        <span class="row-label">{{ row }}</span>
+        <button *ngFor="let col of seatCols; let colIdx = index"
+                class="seat-btn"
+                [ngClass]="{
+                  selected: isSelected(row + col),
+                  booked: isBooked(row + col)
+                }"
+                [disabled]="isBooked(row + col)"
+                (click)="toggleSeat(row + col)">
+          {{ col }}
+        </button>
+      </div>
+    </div>
+    <div class="selected-seats">
+      <strong>Selected Seats:</strong> {{ selectedSeats.join(', ') }}
+    </div>
+    <div class="actions">
+      <button class="book-btn" [disabled]="selectedSeats.length === 0 || isBooking" (click)="bookTickets()">
+        Book Now ({{ selectedSeats.length }})
+      </button>
+    </div>
+    <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success-message">{{ successMessage }}</div>
+</div>

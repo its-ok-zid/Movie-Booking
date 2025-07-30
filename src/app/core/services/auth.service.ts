@@ -2,47 +2,51 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface LoginRequest {
+  loginId: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  loginId: string;
+  password: string;
+  confirmPassword: string;
+  contactNumber: string;
+  role: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private loggedIn: boolean = false;
-  private userRole: string | null = null;
-
   constructor(private http: HttpClient) {}
 
-  login(username: string, password: string): Observable<any> {
-    return this.http.post('/api/auth/login', { username, password });
+  login(data: LoginRequest): Observable<any> {
+    return this.http.post('/api/v1.0/moviebooking/login', data); // Expect JSON response
   }
 
-  register(username: string, password: string): Observable<any> {
-    return this.http.post('/api/auth/register', { username, password });
+  register(data: RegisterRequest): Observable<any> {
+    return this.http.post('/api/v1.0/moviebooking/register', data);
+  }
+
+  resetPassword(data: { loginId: string; newPassword: string; confirmPassword: string }): Observable<any> {
+    return this.http.post('/api/v1.0/moviebooking/reset-password', data, { responseType: 'text' });
   }
 
   logout(): void {
-    this.loggedIn = false;
-    this.userRole = null;
-    localStorage.removeItem('userRole');
+    localStorage.removeItem('role');
+    localStorage.removeItem('token');
   }
 
   isAuthenticated(): boolean {
-    return this.loggedIn;
+    return !!localStorage.getItem('token');
   }
 
   hasRole(role: string): boolean {
-    return this.userRole === role;
-  }
-
-  // Optional: to restore session on reload
-  restoreSession(): void {
-    const role = localStorage.getItem('userRole');
-    if (role) {
-      this.loggedIn = true;
-      this.userRole = role;
-    }
-  }
-
-  getCurrentRole(): string | null {
-    return this.userRole;
+    return localStorage.getItem('role') === role;
   }
 }

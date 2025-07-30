@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;600&family=Raleway:wght@300;400;500&display=swap');
+
+.login_page_main {
+  background: linear-gradient(to top right, #21466b, #59738f);
+  font-family: 'Raleway', sans-serif;
+  font-weight: 300;
+}
+
+.card {
+  background-color: var(--secondary-light) !important;
+}
+
+.card-title {
+  color: var(--primary-dark) !important;
+  font-weight: 600 !important;
+}
+
+.heading_landing_page_height {
+  min-height: 100vh;
+}
+
+.login_font_family {
+  font-family: "Comfortaa", cursive;
+  min-width: 35% !important;
+}
+
+@media only screen and (max-width: 600px) {
+  .button_cs {
+    width: 100% !important;
+    font-size: 1rem !important;
+    padding: 10px 5px !important;
+  }
+}

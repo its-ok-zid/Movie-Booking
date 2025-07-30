@@ -8,7 +8,5 @@ import { AuthService } from './core/services/auth.service';
 })
 export class AppComponent {
   title = 'Movie-Booking';
-    constructor(private authService: AuthService) {
-    this.authService.restoreSession();
-  }
+  constructor(private authService: AuthService) {}
 }

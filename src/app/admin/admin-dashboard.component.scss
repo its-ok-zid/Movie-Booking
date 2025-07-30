@@ -1,0 +1,20 @@
+.admin-dashboard-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
+  padding: 2rem 1rem;
+}
+.table {
+  margin-top: 1rem;
+}
+@media (max-width: 600px) {
+  .admin-dashboard-container {
+    max-width: 98vw;
+    padding: 1rem 0.5rem;
+  }
+  .table {
+    font-size: 0.95rem;
+  }
+}

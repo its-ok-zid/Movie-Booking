@@ -1,0 +1,46 @@
+<div class="login-page">
+  <div class="container">
+    <section class="d-flex flex-column justify-content-center align-items-center min-vh-100">
+      <div class="card login-card p-4 shadow-lg border-0 rounded">
+        <div class="card-body">
+          <h2 class="text-center text-light mb-4">Login</h2>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div class="form-group mb-3">
+              <label for="loginId" class="form-label text-light">Login ID</label>
+              <input id="loginId" formControlName="loginId" class="form-control bg-dark-subtle text-light border-secondary" type="text" placeholder="Enter login ID" />
+              <div *ngIf="loginForm.get('loginId')?.invalid && (loginForm.get('loginId')?.dirty || loginForm.get('loginId')?.touched)" class="text-danger small mt-1">
+                Login ID is required
+              </div>
+            </div>
+
+            <div class="form-group mb-3">
+              <label for="password" class="form-label text-light">Password</label>
+              <input id="password" formControlName="password" class="form-control bg-dark-subtle text-light border-secondary" type="password" placeholder="Enter password" />
+              <div *ngIf="loginForm.get('password')?.invalid && (loginForm.get('password')?.dirty || loginForm.get('password')?.touched)" class="text-danger small mt-1">
+                Password is required
+              </div>
+            </div>
+
+            <div class="form-check mb-3">
+              <input type="checkbox" class="form-check-input" id="remember-me" />
+              <label class="form-check-label text-light" for="remember-me">Remember me</label>
+            </div>
+
+            <div *ngIf="errorMsg" class="text-danger small">{{ errorMsg }}</div>
+            <div *ngIf="successMsg" class="text-success small">{{ successMsg }}</div>
+
+            <button type="submit" class="btn btn-danger w-100 py-2 mt-3" [disabled]="loginForm.invalid">Log in</button>
+
+            <div class="text-center mt-4 text-light small">
+              <a (click)="goToForgotPassword()" class="text-warning text-decoration-none">Forgot Password?</a>
+              <span class="mx-2 text-secondary">|</span>
+              Don't have an account?
+              <a (click)="goToRegister()" class="text-info text-decoration-none">Sign up here</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
