@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MovieService } from '../core/services/movie.service';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../core/services/auth.service';
+import { Router } from '@angular/router';
 
 interface AdminMovie {
   movieName: string;
@@ -24,7 +26,7 @@ export class AdminDashboardComponent implements OnInit {
   editIndex: number | null = null;
   updatedTickets: number = 0;
 
-  constructor(private movieService: MovieService, private http: HttpClient) {}
+  constructor(private movieService: MovieService, private http: HttpClient, public authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchMovies();
@@ -123,5 +125,9 @@ export class AdminDashboardComponent implements OnInit {
   closeErrorModal(): void {
     this.showErrorModal = false;
     this.errorModalMsg = '';
+  }
+    logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

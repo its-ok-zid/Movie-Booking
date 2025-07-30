@@ -1,6 +1,16 @@
 <div class="admin-dashboard-container">
+<div class="navbar px-4 py-2" *ngIf="authService.isAuthenticated()">
+  <div class="navbar-content">
+    <button
+      class="btn logout-button"
+      (click)="logout()"
+    >Logout</button>
+  </div>
+</div>
   <!-- Error Modal -->
-  <div class="modal fade show" tabindex="-1" role="dialog" [ngStyle]="{display: showErrorModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)'}" *ngIf="showErrorModal">
+  <div class="modal fade show" tabindex="-1" role="dialog"
+       [ngStyle]="{display: showErrorModal ? 'block' : 'none', background: 'rgba(0,0,0,0.5)'}"
+       *ngIf="showErrorModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -18,41 +28,37 @@
       </div>
     </div>
   </div>
-  <h2 class="mb-4">Admin Dashboard</h2>
-  <div *ngIf="loading" class="text-center my-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+
+  <h2 class="dashboard-heading">Admin Dashboard</h2>
+
+  <div *ngIf="loading" class="loader-container">
+    <div class="spinner-border text-primary" role="status"></div>
+  </div>
+
+  <div *ngIf="errorMsg" class="alert alert-danger text-center">{{ errorMsg }}</div>
+
+  <div *ngIf="!loading" class="dashboard-card-grid">
+    <div *ngFor="let movie of movies; let i = index" class="movie-card">
+      <h4>{{ movie.movieName }}</h4>
+      <p class="subtle">🎭 {{ movie.theatreName }}</p>
+
+      <!-- Commented Out Booked Tickets -->
+      <!-- <p><strong>Booked:</strong> {{ movie.bookedTickets }}</p> -->
+
+      <p>
+        <strong>Available:</strong>
+        <span *ngIf="editIndex !== i">{{ movie.totalTickets }}</span>
+        <input *ngIf="editIndex === i" type="number" [(ngModel)]="updatedTickets" min="0" class="form-control input-sm" />
+      </p>
+
+      <p><strong>Status:</strong> {{ movie.status }}</p>
+
+      <div class="actions">
+        <button *ngIf="editIndex !== i" class="btn btn-sm btn-primary" (click)="startEdit(i)">Edit</button>
+        <button *ngIf="editIndex === i" class="btn btn-sm btn-success" (click)="saveTickets(i)">Save</button>
+        <button *ngIf="editIndex === i" class="btn btn-sm btn-secondary" (click)="cancelEdit()">Cancel</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteMovie(i)">Delete</button>
+      </div>
     </div>
   </div>
-  <div *ngIf="errorMsg" class="alert alert-danger text-center">{{ errorMsg }}</div>
-  <table class="table table-bordered table-striped" *ngIf="!loading">
-    <thead>
-      <tr>
-        <th>Movie Name</th>
-        <th>Theatre Name</th>
-        <th>Booked Tickets</th>
-        <th>Available Tickets</th>
-        <th>Status</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let movie of movies; let i = index">
-        <td>{{ movie.movieName }}</td>
-        <td>{{ movie.theatreName }}</td>
-        <td>{{ movie.bookedTickets }}</td>
-        <td>
-          <span *ngIf="editIndex !== i">{{ movie.totalTickets }}</span>
-          <input *ngIf="editIndex === i" type="number" [(ngModel)]="updatedTickets" min="0" class="form-control" />
-        </td>
-        <td>{{ movie.status }}</td>
-        <td>
-          <button *ngIf="editIndex !== i" class="btn btn-sm btn-primary me-2" (click)="startEdit(i)">Edit</button>
-          <button *ngIf="editIndex === i" class="btn btn-sm btn-success me-2" (click)="saveTickets(i)">Save</button>
-          <button *ngIf="editIndex === i" class="btn btn-sm btn-secondary me-2" (click)="cancelEdit()">Cancel</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteMovie(i)">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
 </div>

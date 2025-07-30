@@ -1,10 +1,12 @@
 <div class="movies-page-main">
-  <div class="navbar d-flex justify-content-end align-items-center px-4 py-2" *ngIf="authService.isAuthenticated()">
-          <button
-            class="btn logout-button"
-            (click)="logout()"
-          >Logout</button>
+<div class="navbar px-4 py-2" *ngIf="authService.isAuthenticated()">
+  <div class="navbar-content">
+    <button
+      class="btn logout-button"
+      (click)="logout()"
+    >Logout</button>
   </div>
+</div>
   <div class="container py-5">
     <h2 class="text-center trending-title mb-5">Now Showing</h2>
 
