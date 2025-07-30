@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { BookTicketModalComponent } from './book-ticket-modal.component';
 import { MovieService } from '../core/services/movie.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../core/services/auth.service';
 
 export interface Movie {
   movieName: string;
@@ -27,7 +28,7 @@ export class MoviesComponent implements OnInit {
   selectedMovieName = '';
   selectedTheatreName = '';
 
-  constructor(private movieService: MovieService, private router: Router) {}
+  constructor(private movieService: MovieService, private router: Router, public authService: AuthService,) {}
   goToBookingPage(movie: Movie): void {
     this.router.navigate(['/book', movie.movieName, movie.theatreName], {
       queryParams: { totalTickets: movie.totalTickets }
@@ -54,7 +55,7 @@ export class MoviesComponent implements OnInit {
       next: (data) => {
         this.movies = data.map((m: Movie) => ({
           ...m,
-          imageUrl: '/assets/movie-placeholder.jpg'
+          imageUrl: this.getImageForMovie(m.movieName) || '/assets/movie-placeholder.jpg'
         }));
         this.filteredMovies = this.movies;
         this.loading = false;
@@ -93,4 +94,21 @@ export class MoviesComponent implements OnInit {
     this.closeBookingModal();
     this.getAllMovies(); // refresh ticket count
   }
+
+  getImageForMovie(movieName: string): string {
+  const imageMap: { [key: string]: string } = {
+    'Inception': 'assets/inception.jpg',
+    'Dune': 'assets/dune.jpg',
+    'The Dark Knight': 'assets/the_dark_knight.jpg',
+    'Interstellar': 'assets/interstellar.jpg',
+    'Avengers Endgame': 'assets/avengers_end_game.jpg',
+  };
+  return imageMap[movieName] || 'assets/default.jpg'; // fallback
+  }
+
+    logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
 }

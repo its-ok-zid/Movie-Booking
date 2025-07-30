@@ -49,4 +49,16 @@ export class RegisterComponent implements OnInit {
   goToLogin(): void {
     this.router.navigate(['/login']);
   }
+
+  fields = [
+  { id: 'firstName', label: 'First Name', control: 'firstName', type: 'text', placeholder: 'Enter first name', error: 'First name is required' },
+  { id: 'lastName', label: 'Last Name', control: 'lastName', type: 'text', placeholder: 'Enter last name', error: 'Last name is required' },
+  { id: 'email', label: 'Email', control: 'email', type: 'email', placeholder: 'Enter email', error: 'Valid email is required' },
+  { id: 'loginId', label: 'Login ID', control: 'loginId', type: 'text', placeholder: 'Enter login ID', error: 'Login ID is required' },
+  { id: 'password', label: 'Password', control: 'password', type: 'password', placeholder: 'Enter password', error: 'Password is required' },
+  { id: 'confirmPassword', label: 'Confirm Password', control: 'confirmPassword', type: 'password', placeholder: 'Confirm password', error: 'Confirm password is required' },
+  { id: 'contactNumber', label: 'Contact Number', control: 'contactNumber', type: 'text', placeholder: 'Enter contact number', error: 'Contact number is required' },
+  { id: 'role', label: 'Role', control: 'role', type: 'select' }
+];
+
 }

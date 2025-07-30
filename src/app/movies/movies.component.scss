@@ -1,108 +1,154 @@
+/* Override font to match reference design */
+@import url('https://fonts.googleapis.com/css?family=Quicksand:400,700');
 
 .movies-page-main {
-  background: linear-gradient(to top right, #21466b, #59738f);
-  min-height: 100vh;
-  font-family: 'Raleway', sans-serif;
+  background-color: #ffffff; /* match reference background */
+  font-family: 'Quicksand', sans-serif;
+  color: #272727;
+  padding: 1rem;
 }
 
+/* Title */
 .trending-title {
-  font-family: 'Comfortaa', cursive;
-  font-weight: 700;
-  color: #fff;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(33, 70, 107, 0.15);
+  font-size: 24px;
+  font-weight: 400;
+  text-align: center;
+  font-family: 'Quicksand', sans-serif;
+  color: #272727;
+  text-shadow: none;
+  margin-bottom: 2rem;
 }
 
+/* Search bar – minor refinements */
+.search-bar {
+  border-radius: 1rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: none;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border: 2px solid #cf5c3f;
+  overflow: auto;
+  border-radius: 5px;
+  display: flex;
+  width: 60%;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+}
+
+/* Card container */
 .movie-card {
-  border-radius: 1.2rem;
-  overflow: hidden;
-  transition: transform 0.2s, box-shadow 0.2s;
-  background: #fff;
-  box-shadow: 0 4px 16px rgba(33, 70, 107, 0.10);
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.20);
   display: flex;
   flex-direction: column;
-  min-height: 420px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  margin-bottom: 12px;
 }
 
-.movie-card:hover {
-  transform: translateY(-8px) scale(1.04);
-  box-shadow: 0 12px 32px rgba(33, 70, 107, 0.18);
-}
-
+/* Image */
 .movie-img-wrapper {
+  height: 200px;
+  overflow: hidden;
   position: relative;
-  width: 100%;
-  height: 260px;
-  background: #e9ecef;
+  background: #eceef0;
 }
-
 .movie-img {
-  height: 100%;
   width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-top-left-radius: 1.2rem;
-  border-top-right-radius: 1.2rem;
 }
 
+/* Status pill */
 .movie-status {
-  font-size: 0.95rem;
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 1rem;
+  font-size: 0.75rem;
   font-weight: 600;
-  box-shadow: 0 2px 8px rgba(33, 70, 107, 0.10);
-}
-
-.card-title {
-  font-family: 'Comfortaa', cursive;
-  font-weight: 600;
-  color: #21466b;
-  font-size: 1.25rem;
-}
-
-.book-btn {
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 0.7rem;
-  padding: 0.6em 0;
-  background: linear-gradient(90deg, #21466b 0%, #59738f 100%);
-  border: none;
   color: #fff;
-  box-shadow: 0 2px 8px rgba(33, 70, 107, 0.10);
-  transition: background 0.2s;
+  text-transform: uppercase;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Title */
+.movie-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: capitalize;
+  margin: 0 0 0.5rem 0;
+  color: #ffffff;
+}
+
+/* Text */
+.card-body {
+  padding: 1rem;
+  font-weight: bold;
+  background: linear-gradient(to bottom left, #ec2f5b, #FFC39E 100%);
+  color: #ffffff;
+}
+
+/* Book button */
+.book-btn {
+  background: transparent;
+  color: #ffffff;
+  padding: 0.8rem;
+  font-size: 14px;
+  text-transform: uppercase;
+  border-radius: 4px;
+  font-weight: 400;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: background 0.3s ease;
+}
+.book-btn:hover {
+  background-color: rgba(255, 255, 255, 0.12);
 }
 .book-btn:disabled {
-  background: #adb5bd;
-  color: #fff;
+  background-color: rgba(255, 255, 255, 0.2);
   cursor: not-allowed;
 }
 
-.bg-success {
-  background-color: #28a745 !important;
-}
-.bg-warning {
-  background-color: #ffc107 !important;
-  color: #212529 !important;
-}
-.bg-danger {
-  background-color: #dc3545 !important;
-}
-
+/* Responsive image tweaks */
 @media (max-width: 991px) {
-  .movie-card {
-    min-height: 380px;
-  }
   .movie-img-wrapper {
-    height: 200px;
+    height: 180px;
   }
 }
-
 @media (max-width: 575px) {
-  .movie-card {
-    min-height: 320px;
-  }
   .movie-img-wrapper {
-    height: 140px;
+    height: 160px;
   }
-  .card-title {
+  .movie-title {
     font-size: 1rem;
   }
+
+  .logout-button {
+  background-color: #cf5c3f;
+  color: white;
+  font-family: 'Quicksand', sans-serif;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+  background-color: #b94e34;
+}
+
+.navbar {
+  background-color: #fff;
+}
+
 }

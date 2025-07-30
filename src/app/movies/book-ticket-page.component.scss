@@ -1,14 +1,35 @@
 .book-ticket-page-container {
-  max-width: 480px;
-  margin: 2rem auto;
-  background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.12);
-  padding: 2rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 520px;
+  margin: 8rem auto;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  padding: 2.5rem 1.5rem;
+  transition: all 0.3s ease;
+  border: 1px solid #e6e6e6;
+  border-left: 4px solid #cf5c3f;
+  border-top: 4px solid #cf5c3f;
+  border-bottom: 4px solid #cf5c3f;
+   border-right: 4px solid #cf5c3f;
 }
-@media (max-width: 600px) {
-  .book-ticket-page-container {
-    max-width: 98vw;
-    padding: 1rem 0.5rem;
+
+/* Slight scale on hover for desktop (optional visual enhancement) */
+@media (hover: hover) {
+  .book-ticket-page-container:hover {
+    transform: scale(1.01);
+    box-shadow: 0 10px 36px rgba(0, 0, 0, 0.2);
   }
 }
+
+@media (max-width: 600px) {
+  .book-ticket-page-container {
+    max-width: 95vw;
+    margin: 5rem auto;
+    padding: 1.5rem 1rem;
+    border-radius: 14px;
+  }
+}
+
