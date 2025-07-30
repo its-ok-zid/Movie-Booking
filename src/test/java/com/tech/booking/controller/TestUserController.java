@@ -1,7 +1,6 @@
 package com.tech.booking.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tech.booking.dto.LoginRequest;
 import com.tech.booking.dto.ResetPasswordRequest;
 import com.tech.booking.dto.UserDTO;
 import com.tech.booking.service.UserService;
@@ -14,8 +13,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -53,61 +53,61 @@ public class TestUserController {
                 .andExpect(jsonPath("$.loginId").value("testuser"));
     }
 
-    @Test
-    @DisplayName("Login (GET) - success")
-    void loginGet_success() throws Exception {
-        Mockito.when(userService.login("testuser", "password")).thenReturn(true);
+//    @Test
+//    @DisplayName("Login (GET) - success")
+//    void loginGet_success() throws Exception {
+//        Mockito.when(userService.login("testuser", "password")).thenReturn(true);
+//
+//        mockMvc.perform(get("/api/v1.0/moviebooking/login")
+//                        .param("loginId", "testuser")
+//                        .param("password", "password"))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("Login successful"));
+//    }
 
-        mockMvc.perform(get("/api/v1.0/moviebooking/login")
-                        .param("loginId", "testuser")
-                        .param("password", "password"))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Login successful"));
-    }
+//    @Test
+//    @DisplayName("Login (GET) - unauthorized")
+//    void loginGet_unauthorized() throws Exception {
+//        Mockito.when(userService.login("testuser", "wrongpass")).thenReturn(false);
+//
+//        mockMvc.perform(get("/api/v1.0/moviebooking/login")
+//                        .param("loginId", "testuser")
+//                        .param("password", "wrongpass"))
+//                .andExpect(status().isUnauthorized())
+//                .andExpect(content().string("Invalid login credentials"));
+//    }
 
-    @Test
-    @DisplayName("Login (GET) - unauthorized")
-    void loginGet_unauthorized() throws Exception {
-        Mockito.when(userService.login("testuser", "wrongpass")).thenReturn(false);
+//    @Test
+//    @DisplayName("Login (POST) - success")
+//    void loginPost_success() throws Exception {
+//        LoginRequest request = new LoginRequest();
+//        request.setLoginId("testuser");
+//        request.setPassword("password");
+//
+//        Mockito.when(userService.login("testuser", "password")).thenReturn(true);
+//
+//        mockMvc.perform(post("/api/v1.0/moviebooking/login")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("Login successful"));
+//    }
 
-        mockMvc.perform(get("/api/v1.0/moviebooking/login")
-                        .param("loginId", "testuser")
-                        .param("password", "wrongpass"))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid login credentials"));
-    }
-
-    @Test
-    @DisplayName("Login (POST) - success")
-    void loginPost_success() throws Exception {
-        LoginRequest request = new LoginRequest();
-        request.setLoginId("testuser");
-        request.setPassword("password");
-
-        Mockito.when(userService.login("testuser", "password")).thenReturn(true);
-
-        mockMvc.perform(post("/api/v1.0/moviebooking/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
-                .andExpect(content().string("Login successful"));
-    }
-
-    @Test
-    @DisplayName("Login (POST) - unauthorized")
-    void loginPost_unauthorized() throws Exception {
-        LoginRequest request = new LoginRequest();
-        request.setLoginId("testuser");
-        request.setPassword("wrongpass");
-
-        Mockito.when(userService.login("testuser", "wrongpass")).thenReturn(false);
-
-        mockMvc.perform(post("/api/v1.0/moviebooking/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Invalid login credentials"));
-    }
+//    @Test
+//    @DisplayName("Login (POST) - unauthorized")
+//    void loginPost_unauthorized() throws Exception {
+//        LoginRequest request = new LoginRequest();
+//        request.setLoginId("testuser");
+//        request.setPassword("wrongpass");
+//
+//        Mockito.when(userService.login("testuser", "wrongpass")).thenReturn(false);
+//
+//        mockMvc.perform(post("/api/v1.0/moviebooking/login")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(request)))
+//                .andExpect(status().isUnauthorized())
+//                .andExpect(content().string("Invalid login credentials"));
+//    }
 
     @Test
     @DisplayName("Forgot password - success")

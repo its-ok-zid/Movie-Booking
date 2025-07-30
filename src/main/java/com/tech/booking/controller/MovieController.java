@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(path = "/api/v1.0/moviebooking", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,32 +74,44 @@ public class MovieController {
 
 
     @Operation(summary = "Update ticket status and available ticket count")
-    @PutMapping("/{movieName}/update/{ticketId}")
-    public ResponseEntity<String> updateTicketStatus(@PathVariable String movieName,
-                                                     @PathVariable Long ticketId,
-                                                     @RequestBody MovieDTO request) {
-        log.info("Updating ticket status for movie: {}, ticketId: {}", movieName, ticketId);
-        movieService.updateTicketStatus(movieName, ticketId, request);
+    @PutMapping("/{movieName}/update/{theatreName}")
+    public ResponseEntity<?> updateTicketStatus(@PathVariable String movieName,
+                                                @PathVariable String theatreName,
+                                                @RequestBody MovieDTO request) {
+        log.info("Updating ticket status for movie: {}, theatre: {}", movieName, theatreName);
+        movieService.updateTicketStatus(movieName, theatreName, request);
         log.info("Ticket status updated successfully");
-        return ResponseEntity.ok("Ticket status updated successfully.");
+        // Return a JSON object for frontend compatibility
+        return ResponseEntity.ok().body(Map.of("message", "Ticket status updated successfully."));
     }
 
 
     @Operation(summary = "Delete movie by name and theatre")
     @DeleteMapping("/{movieName}/delete/{theatreName}")
-    public ResponseEntity<String> deleteMovie(@PathVariable String movieName,
-                                              @PathVariable String theatreName) {
+    public ResponseEntity<?> deleteMovie(@PathVariable String movieName,
+                                         @PathVariable String theatreName) {
         log.info("Deleting movie: {} in theatre: {}", movieName, theatreName);
 
         boolean hasBookings = movieService.hasBookings(movieName, theatreName);
         if (hasBookings) {
             log.warn("Cannot delete movie: {} in theatre: {} as bookings exist", movieName, theatreName);
+            // Return a JSON object for error
             return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("Cannot delete movie '" + movieName + "' in theatre '" + theatreName + "' as bookings exist for this movie");
+                    .body(Map.of("error", "Cannot delete movie '" + movieName + "' in theatre '" + theatreName + "' as bookings exist for this movie"));
         }
 
         movieService.deleteMovie(movieName, theatreName);
         log.info("Movie deleted successfully: {} - {}", movieName, theatreName);
-        return ResponseEntity.ok("Movie deleted successfully");
+        // Return a JSON object for success
+        return ResponseEntity.ok().body(Map.of("message", "Movie deleted successfully"));
+    }
+
+    @Operation(summary = "Get booked seat numbers for a movie and theatre")
+    @GetMapping("/tickets/booked-seats/{movieName}/{theatreName}")
+    public ResponseEntity<List<String>> getBookedSeats(@PathVariable String movieName,
+                                                       @PathVariable String theatreName) {
+        log.info("Fetching booked seats for movie: {} in theatre: {}", movieName, theatreName);
+        List<String> bookedSeats = movieService.getBookedSeats(movieName, theatreName);
+        return ResponseEntity.ok(bookedSeats);
     }
 }

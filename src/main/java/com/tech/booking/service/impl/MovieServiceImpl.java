@@ -90,12 +90,8 @@ public class MovieServiceImpl implements MovieService {
     }
 
    @Override
-    public void updateTicketStatus(String movieName, Long ticketId, MovieDTO request) {
-        MovieId movieId = new MovieId(movieName, request.getTheatreName());
-
-        Ticket ticket = ticketRepository.findById(ticketId)
-                .orElseThrow(() -> new RuntimeException("Ticket not found."));
-
+    public void updateTicketStatus(String movieName, String theatreName, MovieDTO request) {
+        MovieId movieId = new MovieId(movieName, theatreName);
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new RuntimeException("Movie not found."));
 
@@ -116,6 +112,20 @@ public class MovieServiceImpl implements MovieService {
     public boolean hasBookings(String movieName, String theatreName) {
         MovieId movieId = new MovieId(movieName, theatreName);
         return ticketRepository.existsByMovieId(movieId);
+    }
+
+    @Override
+    public List<String> getBookedSeats(String movieName, String theatreName) {
+        MovieId movieId = new MovieId(movieName, theatreName);
+        List<Ticket> tickets = ticketRepository.findAll().stream()
+                .filter(ticket -> ticket.getId().equals(movieId))
+                .collect(Collectors.toList());
+        // Handle seatNumber as comma-separated string or single seat
+        return tickets.stream()
+                .flatMap(ticket -> ticket.getSeatNumber() == null ? java.util.stream.Stream.empty() : java.util.Arrays.stream(ticket.getSeatNumber().split(",")))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .collect(Collectors.toList());
     }
 
 }

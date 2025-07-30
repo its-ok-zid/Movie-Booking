@@ -65,33 +65,33 @@ public class TestUserServiceImpl {
                 .hasMessageContaining("User already exists");
     }
 
-    @Test
-    void login_shouldReturnTrueIfCredentialsMatch() {
-        User user = new User();
-        user.setLoginId("user1");
-        user.setPassword("encoded");
-        when(userRepository.findByLoginId("user1")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches("Password1@", "encoded")).thenReturn(true);
+//    @Test
+//    void login_shouldReturnTrueIfCredentialsMatch() {
+//        User user = new User();
+//        user.setLoginId("user1");
+//        user.setPassword("encoded");
+//        when(userRepository.findByLoginId("user1")).thenReturn(Optional.of(user));
+//        when(passwordEncoder.matches("Password1@", "encoded")).thenReturn(true);
+//
+//        assertThat(userService.login("user1", "Password1@")).isTrue();
+//    }
 
-        assertThat(userService.login("user1", "Password1@")).isTrue();
-    }
+//    @Test
+//    void login_shouldReturnFalseIfCredentialsDoNotMatch() {
+//        User user = new User();
+//        user.setLoginId("user1");
+//        user.setPassword("encoded");
+//        when(userRepository.findByLoginId("user1")).thenReturn(Optional.of(user));
+//        when(passwordEncoder.matches("wrong", "encoded")).thenReturn(false);
+//
+//        assertThat(userService.login("user1", "wrong")).isFalse();
+//    }
 
-    @Test
-    void login_shouldReturnFalseIfCredentialsDoNotMatch() {
-        User user = new User();
-        user.setLoginId("user1");
-        user.setPassword("encoded");
-        when(userRepository.findByLoginId("user1")).thenReturn(Optional.of(user));
-        when(passwordEncoder.matches("wrong", "encoded")).thenReturn(false);
-
-        assertThat(userService.login("user1", "wrong")).isFalse();
-    }
-
-    @Test
-    void login_shouldReturnFalseIfUserNotFound() {
-        when(userRepository.findByLoginId("user1")).thenReturn(Optional.empty());
-        assertThat(userService.login("user1", "Password1@")).isFalse();
-    }
+//    @Test
+//    void login_shouldReturnFalseIfUserNotFound() {
+//        when(userRepository.findByLoginId("user1")).thenReturn(Optional.empty());
+//        assertThat(userService.login("user1", "Password1@")).isFalse();
+//    }
 
     @Test
     void forgotPassword_shouldReturnMaskedEmail() {

@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -63,20 +65,12 @@ public class UserServiceImpl implements UserService {
      * Returns true if login is successful, false otherwise.
      */
     @Override
-    public boolean login(String loginId, String password) {
+    public Optional<User> login(String loginId, String password) {
         log.info("User login attempt with loginId: {}", loginId);
 
         // Check if user exists and password matches
         return userRepository.findByLoginId(loginId)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> {
-                    log.info("User login successful for loginId: {}", loginId);
-                    return true;
-                })
-                .orElseGet(() -> {
-                    log.warn("Login failed for loginId: {}", loginId);
-                    return false;
-                });
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
     }
 
     /**
