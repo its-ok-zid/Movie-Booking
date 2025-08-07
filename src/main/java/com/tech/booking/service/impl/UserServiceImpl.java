@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
      * @param userDTO the user details to register
      * @return UserDTO containing the registered user's details
      */
+    //apply password validation (pending)
     @Override
     public UserDTO register(UserDTO userDTO) {
         log.info("Registration user with loginId: {}", userDTO.getLoginId());
@@ -45,7 +48,7 @@ public class UserServiceImpl implements UserService {
         BeanUtils.copyProperties(userDTO, user);
         user.setRole(userDTO.getRole() != null ? userDTO.getRole() : Role.USER);
 
-
+        // Hash the password before saving
         String encryptedPassword = new BCryptPasswordEncoder(12).encode(userDTO.getPassword());
         user.setPassword(encryptedPassword);
 
@@ -62,20 +65,12 @@ public class UserServiceImpl implements UserService {
      * Returns true if login is successful, false otherwise.
      */
     @Override
-    public boolean login(String loginId, String password) {
+    public Optional<User> login(String loginId, String password) {
         log.info("User login attempt with loginId: {}", loginId);
 
-
+        // Check if user exists and password matches
         return userRepository.findByLoginId(loginId)
-                .filter(user -> passwordEncoder.matches(password, user.getPassword()))
-                .map(user -> {
-                    log.info("User login successful for loginId: {}", loginId);
-                    return true;
-                })
-                .orElseGet(() -> {
-                    log.warn("Login failed for loginId: {}", loginId);
-                    return false;
-                });
+                .filter(user -> passwordEncoder.matches(password, user.getPassword()));
     }
 
     /**
@@ -93,7 +88,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByLoginId(loginId)
                 .orElseThrow(() -> {
                     log.warn("User not found with loginId: {}", loginId);
-                    return new ResourceNotFoundException("User not found with this login ID: " + loginId);
+                    return new ResourceNotFoundException("User not found with this login ID: "+ loginId);
                 });
 
         String maskedEmail = maskEmail(user.getEmail());
@@ -103,6 +98,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    // Masks the email address by replacing part of the username with asterisks.
     private String maskEmail(String email) {
         if (!StringUtils.hasText(email) || !email.contains("@")) return "unknown@example.com";
         String[] parts = email.split("@");
@@ -112,7 +108,7 @@ public class UserServiceImpl implements UserService {
         return maskedUsername + "@" + domain;
     }
 
-
+    // Resets the user's password after validating the new password and confirming it.
     @Override
     public String resetPassword(ResetPasswordRequest request) {
 

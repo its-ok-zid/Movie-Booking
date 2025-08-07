@@ -14,7 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
+
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(path = "/api/v1.0/moviebooking", produces = MediaType.APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 @Tag(name = "User Controller", description = "Handles user registration, login and password recovery")
@@ -35,29 +41,41 @@ public class UserController {
 
     @Operation(summary = "Login using loginId and password")
     @GetMapping("/login")
-    public ResponseEntity<String> login(@RequestParam("loginId") String loginId,
-                                        @RequestParam("password") String password) {
+    public ResponseEntity<?> login(@RequestParam("loginId") String loginId,
+                                   @RequestParam("password") String password) {
 
         log.info("Login attempt for loginId: {}", loginId);
-        boolean success = userService.login(loginId, password);
+        Optional<com.tech.booking.model.User> userOpt = userService.login(loginId, password);
 
-        if(success) {
-            log.info("Login successful for loginId: {}", loginId);
-            return ResponseEntity.ok("Login successful");
+        if(userOpt.isPresent()) {
+            com.tech.booking.model.User user = userOpt.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("role", user.getRole().name());
+            return ResponseEntity.ok(response);
         } else {
-            log.warn("Login failed for loginId: {}", loginId);
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap("message", "Invalid login credentials"));
         }
     }
 
     @Operation(summary = "Login using loginId and password (POST)")
-    @PostMapping(value = "/login", consumes = "application/json")
-    public ResponseEntity<String> loginPost(@Valid @RequestBody LoginRequest request) {
+    @PostMapping(value = "/login", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<?> loginPost(@Valid @RequestBody LoginRequest request) {
+
         log.info("Login POST attempt for loginId: {}", request.getLoginId());
-        boolean success = userService.login(request.getLoginId(), request.getPassword());
-        return success
-                ? ResponseEntity.ok("Login successful")
-                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid login credentials");
+        Optional<com.tech.booking.model.User> userOpt = userService.login(request.getLoginId(), request.getPassword());
+
+        if (userOpt.isPresent()) {
+            com.tech.booking.model.User user = userOpt.get();
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "Login successful");
+            response.put("role", user.getRole().name());
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Collections.singletonMap("message", "Invalid login credentials"));
+        }
     }
 
     @Operation(summary = "Forgot password flow")
