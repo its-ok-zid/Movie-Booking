@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 export interface LoginRequest {
   loginId: string;
@@ -25,16 +26,18 @@ export interface RegisterRequest {
 export class AuthService {
   constructor(private http: HttpClient) {}
 
+  private readonly BASE_URL = environment.apiUrl + '/api/v1.0/moviebooking';
+
   login(data: LoginRequest): Observable<any> {
-    return this.http.post('/api/v1.0/moviebooking/login', data); // Expect JSON response
+    return this.http.post(`${this.BASE_URL}/login`, data); // Expect JSON response
   }
 
   register(data: RegisterRequest): Observable<any> {
-    return this.http.post('/api/v1.0/moviebooking/register', data);
+    return this.http.post(`${this.BASE_URL}/register`, data);
   }
 
   resetPassword(data: { loginId: string; newPassword: string; confirmPassword: string }): Observable<any> {
-    return this.http.post('/api/v1.0/moviebooking/reset-password', data, { responseType: 'text' });
+    return this.http.post(`${this.BASE_URL}/reset-password`, data, { responseType: 'text' });
   }
 
   logout(): void {

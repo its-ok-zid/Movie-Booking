@@ -3,6 +3,7 @@ import { MovieService } from '../core/services/movie.service';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../core/services/auth.service';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
 
 interface AdminMovie {
   movieName: string;
@@ -27,6 +28,8 @@ export class AdminDashboardComponent implements OnInit {
   updatedTickets: number = 0;
 
   constructor(private movieService: MovieService, private http: HttpClient, public authService: AuthService, private router: Router) {}
+
+  private readonly BASE_URL = environment.apiUrl + '/api/v1.0/moviebooking';
 
   ngOnInit(): void {
     this.fetchMovies();
@@ -55,7 +58,7 @@ export class AdminDashboardComponent implements OnInit {
   fetchBookedTickets(): void {
     let remaining = this.movies.length;
     this.movies.forEach((movie, idx) => {
-      this.http.get<number>(`/api/v1.0/moviebooking/tickets/booked/${movie.movieName}/${movie.theatreName}`).subscribe({
+      this.http.get<number>(`${this.BASE_URL}/tickets/booked/${movie.movieName}/${movie.theatreName}`).subscribe({
         next: (count) => {
           this.movies[idx].bookedTickets = count;
           remaining--;
@@ -82,7 +85,7 @@ export class AdminDashboardComponent implements OnInit {
       theatreName: movie.theatreName,
       totalTickets: this.updatedTickets
     };
-    this.http.put(`/api/v1.0/moviebooking/${movie.movieName}/update/${movie.theatreName}`, payload).subscribe({
+    this.http.put(`${this.BASE_URL}/${movie.movieName}/update/${movie.theatreName}`, payload).subscribe({
       next: () => {
         // Show toast and reload for guaranteed sync
         window.alert('Ticket count updated successfully!');
@@ -98,7 +101,7 @@ export class AdminDashboardComponent implements OnInit {
 
   deleteMovie(index: number): void {
     const movie = this.movies[index];
-    this.http.delete(`/api/v1.0/moviebooking/${movie.movieName}/delete/${movie.theatreName}`).subscribe({
+    this.http.delete(`${this.BASE_URL}/${movie.movieName}/delete/${movie.theatreName}`).subscribe({
       next: () => {
         window.alert('Movie deleted successfully!');
         this.fetchMovies();

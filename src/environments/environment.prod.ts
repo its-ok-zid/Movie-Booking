@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiUrl: 'http://sghosal.us-east-1.elasticbeanstalk.com'
 };
